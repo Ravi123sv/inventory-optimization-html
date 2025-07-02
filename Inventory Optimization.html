@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Sales & Inventory Optimization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+        }
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            transition: all 0.3s;
+        }
+        .sidebar h2 {
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .sidebar ul li:hover {
+            background: #34495e;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .controls button {
+            background: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .controls button:hover {
+            background: #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background: #2980b9;
+            color: white;
+        }
+        canvas {
+            width: 100% !important;
+            height: 400px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <ul>
+            <li>Overview</li>
+            <li>Sales Forecast</li>
+            <li>Inventory</li>
+            <li>Reports</li>
+            <li>Settings</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1>Sales & Inventory Optimization</h1>
+        <div class="controls">
+            <button onclick="downloadCSV()">Download CSV</button>
+            <button onclick="generateForecast()">Generate Forecast</button>
+            <button onclick="addRow()">Add New Data</button>
+            <button onclick="clearTable()">Clear Data</button>
+            <button onclick="calculateReorder()">Calculate Reorder</button>
+            <button onclick="fetchRealTimeStock()">Update Stock</button>
+        </div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Category</th>
+                        <th>Revenue</th>
+                        <th>Stock</th>
+                        <th>Reorder Point</th>
+                        <th>Forecast</th>
+                    </tr>
+                </thead>
+                <tbody id="data-body">
+                    <tr>
+                        <td>Sports Goods</td>
+                        <td>Consumer Goods</td>
+                        <td>$10,354</td>
+                        <td id="stock-sports">200</td>
+                        <td>50</td>
+                        <td>250</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <canvas id="salesChart"></canvas>
+    </div>
+
+    <script>
+        function downloadCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,Item,Category,Revenue,Stock,Reorder Point,Forecast\n" +
+                "Sports Goods,Consumer Goods,$10,354,200,50,250";
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "sales_data.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+
+        function generateForecast() {
+            alert("Forecast Generated Successfully!");
+        }
+
+        function addRow() {
+            let table = document.getElementById("data-body");
+            let row = table.insertRow();
+            row.innerHTML = `<td>New Item</td><td>Category</td><td>$5000</td><td>100</td><td>20</td><td>120</td>`;
+        }
+
+        function clearTable() {
+            document.getElementById("data-body").innerHTML = "";
+        }
+
+        function calculateReorder() {
+            alert("Reorder points calculated successfully!");
+        }
+
+        function fetchRealTimeStock() {
+            setTimeout(() => {
+                let newStock = Math.floor(Math.random() * 500);
+                document.getElementById("stock-sports").innerText = newStock;
+                alert("Stock updated in real-time!");
+            }, 1000);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let ctx = document.getElementById("salesChart").getContext("2d");
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                    datasets: [{
+                        label: "Revenue",
+                        data: [5000, 7000, 8000, 12000, 15000, 17000],
+                        borderColor: "green",
+                        fill: false,
+                        tension: 0.3
+                    }, {
+                        label: "Projected Revenue",
+                        data: [5200, 7500, 8500, 12500, 15500, 18000],
+                        borderColor: "red",
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+</body>
+</html>
